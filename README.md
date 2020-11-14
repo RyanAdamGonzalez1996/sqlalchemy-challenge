@@ -6,6 +6,9 @@ Section 10 HW
 ## Code
   - Contains the jupyter notebook for Step 1.
   - Contains the app.py for Step 2.
+  
+## Images
+  - Contains the images of the graphs created in Step 1
 
 ## Resources
   - Contains the sqlite file along with the csv files used in this project.
