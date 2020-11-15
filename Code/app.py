@@ -29,8 +29,9 @@ def home():
         f"/api/v1.0/precipitation<br/>"
         f"/api/v1.0/stations<br/>"
         f"/api/v1.0/tobs<br/>"
-        f"api/v1.0/'startdate'<br/>"
-        f"api/v1.0/'startdate'/'enddate'"
+        f"/api/v1.0/'startdate'<br/>"
+        f"/api/v1.0/'startdate'/'enddate'<br/>"
+        f"Date Format is: yyyy-mm-dd"
     )
 
 @app.route("/api/v1.0/precipitation")
@@ -77,13 +78,37 @@ def tobs():
     session.close()
 
     return jsonify(results)
-    
-# @app.route("api/v1.0/<start>")
-# def startDate():
 
+@app.route("/api/v1.0/<startDate>")
+def startDate(startDate):
+    # Create a Session to the database
+    session = Session(engine)
 
-# @app.route("api/v1.0/<start>/<end>")
-# def endDate():
+    results = session.query(func.min(measurement_table.tobs), \
+                func.avg(measurement_table.tobs), \
+                func.max(measurement_table.tobs)).\
+                filter(measurement_table.date >= startDate).\
+                group_by(measurement_table.date).all()
+
+    session.close()
+
+    return jsonify(results)
+
+@app.route("/api/v1.0/<startDate>/<endDate>")
+def endDate(startDate, endDate):
+    # Create a Session to the database
+    session = Session(engine)
+
+    results = session.query(func.min(measurement_table.tobs), \
+                func.avg(measurement_table.tobs), \
+                func.max(measurement_table.tobs)).\
+                filter(measurement_table.date >= startDate).\
+                filter(measurement_table.date <= endDate).\
+                group_by(measurement_table.date).all()
+
+    session.close()
+
+    return jsonify(results)
 
 if __name__ == "__main__":
     app.run(debug = True)
