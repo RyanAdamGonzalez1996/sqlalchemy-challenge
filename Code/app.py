@@ -60,6 +60,7 @@ def stations():
     # Create a Session to the database
     session = Session(engine)
 
+    # Query the station id and name in the Station table
     results = session.query(station_table.station, station_table.name).all()
 
     session.close()
@@ -71,6 +72,7 @@ def tobs():
     # Create a Session to the database
     session = Session(engine)
 
+    # Query the temps for each date, for the most active station: USC005129281
     results = session.query(measurement_table.date, measurement_table.tobs).\
                 filter(measurement_table.date >= (dt.date(2017, 8, 23) - dt.timedelta(weeks = 52))).\
                 filter(measurement_table.station == "USC00519281").all()
@@ -84,6 +86,7 @@ def startDate(startDate):
     # Create a Session to the database
     session = Session(engine)
 
+    # Query the min, avg, and max temperatures for all of the dates after the 'startDate'
     results = session.query(func.min(measurement_table.tobs), \
                 func.avg(measurement_table.tobs), \
                 func.max(measurement_table.tobs)).\
@@ -99,6 +102,7 @@ def endDate(startDate, endDate):
     # Create a Session to the database
     session = Session(engine)
 
+    # Query the min, avg, and max temperatures for all of the dates between the 'startDate' and 'endDate'
     results = session.query(func.min(measurement_table.tobs), \
                 func.avg(measurement_table.tobs), \
                 func.max(measurement_table.tobs)).\
